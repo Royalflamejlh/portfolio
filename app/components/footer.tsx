@@ -27,7 +27,7 @@ export default function Footer() {
             href="https://github.com/Royalflamejlh"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">github</p>
+            <p className="ml-2 h-7">GitHub</p>
           </a>
         </li>
         <li>
@@ -38,10 +38,10 @@ export default function Footer() {
             href="https://www.linkedin.com/in/john-howard-981952315/"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">linkedin</p>
+            <p className="ml-2 h-7">Linkedin</p>
           </a>
         </li>
-	<li>
+	      <li>
           <a
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
@@ -49,7 +49,7 @@ export default function Footer() {
             href="mailto:john@thehowardfamily.net"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">email</p>
+            <p className="ml-2 h-7">Email</p>
           </a>
         </li>
       </ul>
