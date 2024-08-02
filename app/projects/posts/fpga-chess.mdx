@@ -24,3 +24,78 @@ Sadly, I had to turn in the FPGA and don't have any pictures of the game to show
 The verilog can be compiled and installed using Quartus Prime 18.1.
 
 The software to run is in the software directory and can be compiled to an elf using make or eclipse and then programmed onto the board.
+
+### Summary of Operation
+
+For my design, I created a chess system on the FPGA. It is based around the design of modern chess services such as Lichess. It has the functionality of allowing legal moves for two players to play with a mouse on alternating turns. I built on lab 7 to add mouse inputs to the game along with animating the moves of the pieces. Along with that in C, I implemented the general game and processing of the moves.
+
+## Hardware Component
+
+### I/O
+The I/O for my final project is simply a mouse that uses the drivers provided from the previous labs. I made the driver loop the main game loop for my project and update the mouse position while computing the next step in the game.
+
+### VGA
+The VGA works similarly to the previous labs, as it uses the same sort of VGA code and mapping that we have used in previous labs. I expanded the VRAM to be two frames large and would draw one frame and write to another and then flip the addresses to the one being drawn and the one being written.
+
+### Sprites
+For the sprites in my project, I wrote the sprite into C and implemented a sprite ROM that can hold 32 sprites. I then load the shape of the sprite into the ROM. When I want it to be drawn, I load the sprite from the address that I stored it into and then load it into the VRAM. When you call to draw the sprite, you also tell it what color you want it to be drawn as.
+
+## C Functions / Software
+
+### Main.c
+The `main.c` is primarily used to initialize the mouse driver, but it also calls the functions to set up the game and store the sprite. It then starts the game loops where a frame is drawn, the computer tries to move, then it updates the mouse movement from the mouse driver with the displacement and the button press.
+
+### Game.c
+- **game_setup**: Sets up the game variables, restarts, and initializes the game. It resets the check, the board, what piece the player is holding, and whose turn it is.
+- **pick-up**: Called when a player clicks on a piece. If there is a piece under the mouse, it will set the hand to 1 and store the x and y of the piece being clicked.
+- **put_down**: Drives a lot of the game logic and is called when the button is released. If there is nothing in the hand, then it breaks out, but otherwise, it tries to see if the move that the user is making is a legal move or a promotion. Then it will update the pieces on the temporary board and change the game state variable, such as the ability to castle based on the move. Once all calculations are done, it will copy all the changes from the temporary board to the current board.
+
+#### Legal Move
+Takes in the X and Y coordinates of where the piece in the hand is trying to be moved and sees if it is possible for that player to move the piece there based on how the piece would move, the game state, and if it would put themselves into check. This function is long because each piece has its own rules for how it can move, and they all have to be checked individually.
+
+#### Move into Check
+Works by placing the piece into where it would be and seeing if the user who is moving the piece is now in check.
+
+#### In Check
+Works by finding the location of the king and then working outwards in all directions of the king (diagonal and horizontal/vertical) and the knight positions to see if the king of the color passed in is in check. If the king is in check, it returns the char of the piece placing it in check and sets global variables to the position of the piece doing the check.
+
+#### In Checkmate
+Returns 1 if the player has been checkmated or 0 if they haven't. This function first works by making sure the player is in check. It then finds the position of the king that is in check and sees if the king has any legal moves to get out of check. If it doesn’t, it checks to see if the player is in a double-check. If the player is in double-check and the king has no legal moves, then it has to be a checkmate. To check for double-check, it will replace the checking piece with a pawn of the same team as the person in check and then see if the user is still in check. If they are, that means that two pieces are giving a check at the same time. Next, if it isn’t a double check, it first sees if any piece can capture the piece delivering the check. If the piece delivering the check is able to be captured, then it's not checkmate. Otherwise, it will check every square in between the checking piece and the king and see if the user can move a piece into that square to block the check. If they can, then it's not a checkmate otherwise it is a checkmate.
+
+### Sprite.c
+Simply initializes an array of all the sprite values. Each sprite array can contain two colors represented by 1 and 2, and to be loaded into the sprite ROM, they have to be size 19x19. The mouse sprite is drawn by the NOIS instead of the sprite ROM since it's smaller and manageable for the NOIS to do.
+
+### VGA_color.c
+The VGA color file page is where most of the interfacing between the game logic and drawing of the pictures happens and does most of the interfacing with the FPGA. It starts by setting up all the variables for the functions.
+
+#### Functions
+- **Text VGA color clear**: Clears all the data.
+- **Set and get pixel color**: Finds or gives the value in VRAM of the current frame.
+- **Set color palette**: Identical to the function from lab 7 and loads in the color values to the corresponding address and bit positions.
+- **Set colors**: Initializes all the colors that will be used in the game.
+- **Store sprites**: Takes all the sprites initialized in `sprite.c` and loads them into an array. It then loads them into the sprite ROM.
+- **Draw sprite**: Works by being passed an address, color, and a position, then sends a signal to the board telling it to load that address from the sprite ROM and load it into the VRAM.
+- **Draw frame**: Calls all the other draw functions based on where they should be based on the height of the thing being drawn.
+- **Draw button**: Tells the hardware to draw the menu button sprite onto the buffer frame.
+- **Draw menu button**: Draws the options menu when the game is over or the menu is open and draws if the mouse is hovering over one of the menu options.
+- **Draw color menu**: Draws the color menu if it is open.
+- **Draw promote**: Happens if the user has pushed a pawn to the other side of the board and can change it into another piece.
+- **Draw board**: Sends a control signal to the board to tell it to load an image of the board onto the selected buffer frame.
+- **Draw turn**: Sends a signal depending on whose turn it is that draws the indicator sprite to the screen.
+- **Draw all pieces**: Iterates through the board and calls the draw piece function depending on the piece on the board.
+- **Draw mouse**: Iterates through the mouse sprite and draws the pixels of the mouse straight into the VRAM.
+
+### Computer Move Function
+Works by seeing if the computer is turned on and it's black’s turn. Then, if true, it will pick up a random piece and see if that piece has any legal moves. It will do that until it can find a move for a piece then it will make that move. It also will always promote to a queen if it is possible for it to promote. It all works by calling the move mouse function as if it were the black player moving the mouse, then once it has finished it sets the mouse position back so once the next frame is drawn it looks like the mouse hasn’t moved at all.
+
+### Move Mouse Function
+First works by calculating the new position of the mouse and then it sees if any of the menus are open. If one of the menus is open, it will update the hover and click for any of the menus on the screen by checking if the mouse is between the x and y coords of the corresponding drawn sprite positions. Otherwise, it will call the pickup and put down functions to update the game state.
+
+## Diagrams
+
+![Chess SOC Picture 1](Chess_soc_picture_1.png)
+
+![Chess SOC Picture 2](Chess_soc_picture_2.png)
+
+![VGA Controller Diagram](VGA_Controller_Diagram.png)
+

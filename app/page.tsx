@@ -28,7 +28,7 @@ export default function Page() {
       </h1>
       
       <div className="my-8">
-        <ProjectPosts />
+        <p> My Chess Engine</p>
       </div>
     </section>
   )
