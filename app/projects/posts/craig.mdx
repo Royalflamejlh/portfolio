@@ -4,4 +4,52 @@ publishedAt: '2024-04-08'
 summary: 'A competitive lesson in high performance code'
 ---
 
-The craig engine is a project I started working on back in...
+# Craig Engine
+
+## Introduction
+
+One of my friends and I thought it would be fun to both make chess engines, 
+and have them play against each other.
+At the start of working on this project I had no idea how satisfying it would be to 
+write and test a chess engine.
+
+
+### Board Representation
+
+The first thing I had to do when writing the engine was pick a representation, 
+while the first thing you may thing of is a char-array of length 64 for each piece and square
+this has generally fallen out of popularity, especially with the move to 64-bit processors
+which allow us to represent pieces on the board as a 64 bit integer called
+bitboard representation. For this to work though you have to manage multiple boards and make 
+sure you keep them in sync. As you have a bitboard for each type of piece and color, along with
+additional bitboards that hold information like which squares are under attack.
+This allows us to greatly reduces the number of cycles needed for move generation and analysis
+while introducing a bit of complexity.
+
+### Move Generation
+
+Once you have your board you have to generate all the legal moves in a position,
+this can be very challenging because they movement of each piece depends on a number of 
+factors such as the Occupancy (position of all other pieces)
+whether or not the piece is pinned to the king,
+
+### Analysis
+
+
+### Search
+
+
+## Features
+
+- Implements the [UCI interface](https://gist.github.com/DOBRO/2592c6dad754ba67e6dcaec8c90165bf)
+- Bitboard representation
+- Move generation
+- Move pruning and Sorting
+- Evaluation function
+- Alpha-Beta Pruning
+- Position Hashing
+- Transposition
+
+## Acknowledgements
+
+Shout out to the [Chess Programming WIKI](https://chessprogramming.org/)
