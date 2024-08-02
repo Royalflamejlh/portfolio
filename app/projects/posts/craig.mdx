@@ -28,28 +28,75 @@ while introducing a bit of complexity.
 
 ### Move Generation
 
-Once you have your board you have to generate all the legal moves in a position,
-this can be very challenging because they movement of each piece depends on a number of 
-factors such as the Occupancy (position of all other pieces)
-whether or not the piece is pinned to the king,
+Once I had my board representation next I had  to generate all the legal moves in a position,
+this is done for the King, Pawn, and Knight by of mapping each square to legal moves from that square and
+then when using it comparing it with open and unattacked squares. The sliding pieces, such as the Queen, Bishop and Rook
+provide their own challenge which I solved by using a hashing technique known as 
+[magic bitboards](https://www.chessprogramming.org/Magic_Bitboards). Once I had move generation I spent a lot 
+of time on debugging using a [perft](https://www.chessprogramming.org/Perft) function I had written.
 
-### Analysis
+### Evaluation
 
+For positional evaluation I originally just used a pure material solution which gave each piece type
+a value and judged who was winning based on material advantages. I upgraded the evaluation function to a 
+method that has two stages, mid-game and end-game, that takes into account positional advantages
+and is able to understand different values for pieces based on the stage of the game. Implementing this
+saw a huge increase in the skill level of the engine, and I expect if I eventually implement NNUE
+in the future I will see another large jump in skill.
 
 ### Search
 
+The search algorithm used in the craig engine is an [alpha-beta](https://en.wikipedia.org/wiki/Alpha–beta_pruning) search.
+The speedup in this type of algorithm is that we can use move ordering to guess which move will be
+the best in any position, and then see if that move is refuted. Since both sides want to pick the best move this 
+allows us to prune a lot of moves as they would either give the opponent too good of a move or just lose the current
+player evaluation points. Every time a position is searched the resulting found best move hashed based on the position
+and stored in a hash table. This allows us to do a process of iterative deepening where we use our previous
+found best moves to predict which part of the search tree to explore first.
+
+The search also implements a few more pruning methods:
+- Zero Window Search
+- Null Move Pruning
+- Futility Pruning
+- Delta Pruning
+- Late Move Reductions
+- Razoring
+
+Once a best move is found, a quiescence search is done to make sure that move can't be refuted at a slightly deeper depth
+with a simple recapture. 
 
 ## Features
 
 - Implements the [UCI interface](https://gist.github.com/DOBRO/2592c6dad754ba67e6dcaec8c90165bf)
 - Bitboard representation
-- Move generation
+- Magic Bitboard Move generation
 - Move pruning and Sorting
 - Evaluation function
-- Alpha-Beta Pruning
+- Search Pruning
 - Position Hashing
 - Transposition
+- Static Exchange Evaluator
+
+## Future Considerations
+
+In the future with this project there are many things that I would like to add and change.
+Some of the things on the top of my mind are:
+
+- **NNUE** The new popular way to evaluate positions in chess are with a neural networks that you 
+can feed in the bitboards to get some sort of evaluation from. I have not looked too far into this
+as it adds a huge layer of complexity and would be a whole separate project, but eventually I would
+like to write a NNUE for the engine.
+
+- **Opening and Endgame book support** This would a relatively simple thing to add. It would allow
+for the engine to avoid drawing and losing hard technical endgames, and allow it to compete in tournaments
+against other engines which use opening books at the start of games to ensure a unique match.
+
+- **Improved Multithreading** As of right now the engine when in multithreaded mode will launch
+completely unique search threads that share and make atomic operations on the common hash table. The way
+the threading is currently implemented leaves a lot of room for improvement.
 
 ## Acknowledgements
 
 Shout out to the [Chess Programming WIKI](https://chessprogramming.org/)
+
+And to Luke for making the rival engine.
