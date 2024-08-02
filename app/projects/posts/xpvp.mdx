@@ -4,4 +4,51 @@ publishedAt: '2024-04-07'
 summary: 'My foray into Java development'
 ---
 
-The XPVP minecraft server still very much a work in progress. 
+## Introduction
+
+I have always had fun setting up and running servers for various games and services,
+but this project is one of the first I have developed most of the software stack for.
+
+The goal when making this project was to create a fun and competitive minecraft server
+that isn't based around microtransactions and has a clear path for players to see and
+track themselves improve. It started from working from the ideas left behind by the old
+mcpvp server and trying to modernize it for the current minecraft playerbase.
+
+
+## Features
+
+- Elo based ranking systems
+- Player rewards
+- Kits suited to different playstyles
+- Website showing player progression and statistics
+
+## Structure
+
+This is a very general overview of the stack for the service:
+
+![flowchart](/images/xpvp/xpvp-flowchart.svg)
+
+When a player connects they are sent to the lobby server where they can
+choose to queue for a game mode.
+
+When the player enters the queue the lobby server has a matchmaking coordinator that uses their
+personal statistics from the database to find them a match. 
+
+Once a match is found the lobby tells the proxy to send them to game server and
+when the game is concluded the match and player
+data is sent to a SQL database allowing players to view matches and stats online.
+
+## Plugins
+
+Plugins are the term for the software that hooks into the server API, in
+my case Paper's API allowing you to create custom content without having 
+to rewrite or use reflection on Mojang's provided server jar.
+
+#### Game Plugin
+
+#### Queue Plugin
+
+#### Lobby Plugin
+
+
+The XPVP minecraft server is still very much a work in progress.

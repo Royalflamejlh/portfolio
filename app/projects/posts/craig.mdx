@@ -13,6 +13,17 @@ and have them play against each other.
 At the start of working on this project I had no idea how satisfying it would be to 
 write and test a chess engine.
 
+## Features
+
+- Implements the [UCI interface](https://gist.github.com/DOBRO/2592c6dad754ba67e6dcaec8c90165bf)
+- Bitboard representation
+- Magic Bitboard Move generation
+- Move pruning and Sorting
+- Evaluation function
+- Search Pruning
+- Position Hashing
+- Transposition
+- Static Exchange Evaluator
 
 ### Board Representation
 
@@ -64,18 +75,6 @@ The search also implements a few more pruning methods:
 
 Once a best move is found, a quiescence search is done to make sure that move can't be refuted at a slightly deeper depth
 with a simple recapture. 
-
-## Features
-
-- Implements the [UCI interface](https://gist.github.com/DOBRO/2592c6dad754ba67e6dcaec8c90165bf)
-- Bitboard representation
-- Magic Bitboard Move generation
-- Move pruning and Sorting
-- Evaluation function
-- Search Pruning
-- Position Hashing
-- Transposition
-- Static Exchange Evaluator
 
 ## Future Considerations
 
