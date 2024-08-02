@@ -16,7 +16,7 @@ export default function Page() {
         </div>
         
         <img
-          src="/static/images/john.png"
+          src="/images/john.png"
           alt="John"
           className="ml-4 rounded-lg"
           style={{ width: '150px', height: 'auto' }} // Adjust width as needed
