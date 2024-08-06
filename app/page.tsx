@@ -63,7 +63,8 @@ export default function Page() {
           </div>
         </Link>
       </div>
-
+      
+      <p> This site is still a WIP so let me know about any typos / mistakes you find!</p>
     </section>
   )
 }
