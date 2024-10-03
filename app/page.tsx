@@ -25,7 +25,25 @@ export default function Page() {
       </div>
       
       <h1 className="mb-4 text-2xl font-semibold tracking-tighter">
-        Highlighted Projects
+        Most Recent Project:
+      </h1>
+      
+      <div className="mb-8">
+        <Link
+          key="craig"
+          className="flex flex-col space-y-1 mb-4"
+          href={`/projects/esp84`}
+        >
+          <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
+            <p className="text-neutral-900 dark:text-neutral-100 tracking-tight">
+              {"ESP-84: Modifying and over engineering the PCB for Chromalock's ti32."}
+            </p>
+          </div>
+        </Link>
+      </div>
+      
+      <h1 className="mb-4 text-2xl font-semibold tracking-tighter">
+        Other Highlighted Projects
       </h1>
       
       <div className="mb-8">
@@ -63,8 +81,6 @@ export default function Page() {
           </div>
         </Link>
       </div>
-      
-      <p> This site is still a WIP so let me know about any typos / mistakes you find!</p>
     </section>
   )
 }
