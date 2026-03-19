@@ -10,10 +10,9 @@ export default function Page() {
             About Me
           </h1>
           <p>
-            {`I'm John, a computer engineering grad from
-            the University of Illinois and embedded engineer. I am constantly working on a wide variety of projects.
-            At and outside of work. I have experience in embedded systems, software development, 
-            and dev ops, and embedded hardware design.`}
+            {`I'm John, an embedded software engineer working on simulator hardware and the software stack around it.
+            I'm a computer engineering grad from the University of Illinois who enjoys and is always building things
+            at work and outside of work. I like getting into and learning about anything across embedded systems, full stack development, dev ops, and hardware design.`}
           </p>
         </div>
 
@@ -80,12 +79,14 @@ export default function Page() {
           'Java',
           'C',
           'C#',
+          'Python',
           'MariaDB / SQL',
           'Redis',
           'Full Stack Development',
           'PIC32 Embedded',
           'PCB Design',
-          'Python',
+          'Jira',
+          'Git / GitHub',
         ].map((skill) => (
           <span
             key={skill}
@@ -102,17 +103,17 @@ export default function Page() {
 
       <div className="mb-8">
         <p className="text-neutral-900 dark:text-neutral-100 mb-3">
-          {`As an embedded engineer I work across the full development cycle and stack of simulator pods,
-          and working at a smaller size company means I have worn many hats.
-          I work with physical simulation hardware that interfaces with windows HID APIS.
-          My work spans firmware, drivers, diagnostics, and application integration.`}
+          {`I work across the full software stack of simulator pods at a small company, which means wearing a lot of hats.
+          The role is software and embedded focused - writing application-layer code for Windows, and interfacing with our companies remote infrastructure (database and apis),
+          building internal tooling, and developing firmware for the embedded hardware that lives inside the simulators.`}
         </p>
         <ul className="list-disc list-inside space-y-1 text-neutral-900 dark:text-neutral-100">
-          <li>{`Windows integration - bridging embedded hardware in with Windows software, and smoothing the control to the application layer`}</li>
-          <li>{`Fault diagnosis - identifying, reproducing, and resolving hardware faults and bottlenecks that impact users`}</li>
-          <li>{`Third-party device integration - bringing external hardware and peripherals into the stack, reverse engineering and working with vendor APIs docs to make them work reliably`}</li>
-          <li>{`Python tooling - test automation, data analysis for hardware validation, and custom instrument packages including an oscilloscope interface library for automated measurements over long time periods`}</li>
-          <li>{`PIC32 embedded development - writing and maintaining firmware for the microcontrollers that power + interface peripherals within the simulator`}</li>
+          <li>{`Fault triage - working directly with the support team to triage, prioritize, and resolve hardware and software issues reported by customers`}</li>
+          <li>{`Third-party integration - bringing external devices and peripherals into the stack by working with vendor APIs and documentation to make them work reliably`}</li>
+          <li>{`Software development - writing Windows software that interfaces with simulator hardware over HID, improving the application layer and user experience`}</li>
+          <li>{`Python tooling - test automation frameworks, data analysis for hardware validation, and custom instrument packages including an oscilloscope library for long-run automated measurements`}</li>
+          <li>{`PIC32 firmware - developing and maintaining firmware for the microcontrollers that power peripheral hardware inside the simulators`}</li>
+          <li>{`Backend integration - interfacing with the simulation databases and Azure file systems for data storage, retrieval, and access`}</li>
         </ul>
       </div>
     </section>
