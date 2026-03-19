@@ -1,21 +1,103 @@
 ---
 title: 'Online Community Server'
 publishedAt: '2026-03-19'
-summary: 'Leading a team to collaboratively build'
-wip: 'true'
+summary: 'Leading a collaborative team to build a Minecraft server for a large online community'
 ---
-
-# UNDER CONSTRUCTION
-
-This page is still under construction
 
 ## Introduction
 
-Using what I learned from the (xpvp development here ), which is actually still ongoing (though I'm on a hiatus of working on it). I began working with an online community to bring to life a Minecraft server. This meant leading and organizing artists, developers, and operators from all parts of the community and guiding them toward a vision that I had for the server.
+Building on what I learned from [XPVP](/projects/xpvp), I starting building a large online community now with over **250 active players**.
+This is my first personal project that instead of just going for the technical challenge I was
+coordinating artists, developers, and operators from within the community.
+
+This is a collaborative project where my role includes leadership, backend development,
+infrastructure, and guiding contribution along with managing community feedback.
+
+---
 
 ## My Role
 
-- Developed custom integration with the community's existing backend in java
-- Led artists to create custom models and textures
-- Stood up software stack on cloud provider OVH
+- **Tech Lead** - Architected the full server stack
+- **Plugin developer** - Developed custom Java plugins tailored to the community
+- **DevOps** - Deployed and manage the stack on bare metal  + a separate VPS for web and auth services
+- **Coordinator** - Directed artists creating custom models and textures, developers building features, and operators managing the community and status
 
+---
+
+## Infrastructure
+
+The stack is split across two environments:
+
+| Environment | Role |
+|---|---|
+| OVH Bare Metal | Game server itself |
+| OVH VPS | Website, auth stack, and external-facing web services |
+
+All game server services run as Docker containers with isolated networks separating player traffic from internal service communication. And heavy web traffick from affecting game traffic and status.
+
+### Game Servers
+
+Multiple Purpur game servers sit behind a Velocity proxy, which handles all player connections and routing.
+
+### Database & Persistence
+
+A central **MariaDB** instance is shared across all game servers. Each plugin connects via a dedicated database user with HikariCP connection pooling. Schema bootstrap is handled automatically on startup.
+
+### Monitoring
+
+- **Prometheus** - Metrics scraped from each game server
+- **Player analytics** - Activity and session tracking exposed through the proxy
+
+### Backups
+
+World and database backups use **Restic** with **Backblaze B2** as the storage backend, transported via `rclone`. Backups are coordinated over RCON so world saves are paused during snapshots to prevent corruption.
+
+| Target | Schedule | Retention |
+|---|---|---|
+| Main world | Hourly | 24 hourly · 7 daily · 5 weekly · 12 monthly · 75 yearly |
+| Secondary world | Daily | 7 daily · 5 weekly · 12 monthly · 75 yearly |
+| Database | Daily | 7 daily · 5 weekly · 12 monthly · 75 yearly |
+
+---
+
+## Custom Plugin Suite
+
+All plugins are written in Java targeting the Paper and Bukkit API. Each was built for this community specifically. Shared infrastructure across the suite:
+
+- **MariaDB + HikariCP** - All stateful plugins persist to the central database via JDBC with connection pooling
+- **Vault API** - Economy plugins integrate through the standard Vault abstraction layer
+- **PlaceholderAPI** - Dynamic values exposed to chat, scoreboards, and other plugins
+- **ServerCore** - Central plugin acts as abstraction between our other custom plugins
+
+### Authentication & Identity
+
+Players link their in-game account to the community's external platform via a **REST API** on the game server side to the VPS web server. The VPS handles the web-facing side using **OAuth**, and stores a small amount of user info for session caching.
+
+### Economy & Banking
+
+A full banking system built on the Vault economy API. Supports peer-to-peer loans with a credit scoring system based on repayment history, time based bonds with interest, and a commodity buyback window. Persistence uses a normalized MariaDB schema across accounts, loans, payments, bonds, and buyback tables.
+
+### Player Market
+
+A stock market style trading system backed by MariaDB for order history. Supports both market orders (instant execution) and limit orders (queued until price is met). Includes configurable sales tax, item authenticity validation to prevent NBT exploit abuse, and volume and price history tracking.
+
+### Land & Progression System
+
+Handles team membership, territory claiming (via a 3rd part plugin Lands plugin integration), and tiered progression that unlocks cosmetics and gameplay permissions. Player state is persisted to MariaDB and flushed periodically via a dirty tracking pattern to reduce write load.
+
+### Community Goals
+
+A server wide achievement system where players contribute items or currency toward shared objectives. Progress is tracked in MariaDB and displayed via boss bars and PlaceholderAPI placeholders. Reaching thresholds unlocks server wide features and can trigger major events. Exposes a contribution event API for other plugins to hook into.
+
+---
+
+## Collaboration
+
+One of the things I'm most proud of with this project is the team from the community that has formed to support it.
+
+- **Artists** contributed custom models, textures, and resource pack assets
+- **Developers** took on plugin features and server-side tooling
+- **Operators** handled day-to-day moderation and player support
+
+Keeping everyone aligned across timezones, (we have people in every continent except Antarctica) skill levels, and competing priorities takes
+planning, dedication and understanding.

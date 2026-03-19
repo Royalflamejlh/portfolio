@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs -I {} basename {})",
+      "Read(//mnt/c/Users/john/projects/portfolio/$dir/src/main/**)",
+      "Bash(/dev/null -exec wc -l {} +)",
+      "Bash(done)",
+      "Bash(npm install:*)"
+    ]
+  }
+}

@@ -1,28 +1,101 @@
 ---
 title: 'Home Server'
 publishedAt: '2024-04-07'
-summary: 'What I run from my garage'
-wip: 'true'
+summary: 'Whats running out of my parents house!'
 ---
 
 ## Introduction
 
-I have been running some server or another from my garage for nearly the past ten years at this point. 
+I have been running some server or another from my garage for nearly the past ten years at this point.
 
 It started out as mostly hosting game servers for my friends, but during the pandemic I got into both
 home automation and hosting a wider stack of server applications and it has grown since then.
 
-There are two main "servers" and two storage servers
-- Home Management Server
-- Application ( Game / Media) Server
-- TrueNAS Scale Storage Server
-- Synology NAS
+The setup is split across two main VLANs:
 
-Here is a brief explanation of the role and what I have set up on each server.
-I may make these more tutorial style in the future.
+- **Media / Application Network** - Public-facing services, the media stack, and general applications
+- **Internal / Home Network** - Home Assistant, cameras, automation, and internal-only services
+
+ 
+---
+
+## Media & Application Server
+
+The main workhorse machine running a fully containerized stack via Docker.
+
+### Media Stack
+
+The core of this server is a self-hosted media pipeline built around Plex.
+
+| Service | Role |
+|---|---|
+| **Plex** | Media streaming server |
+| **Tautulli** | Plex analytics and watch history |
+| **Plex Meta Manager** | Automated metadata and collection management |
+
+A suite of content management services handles automated tracking, downloading, and organization of the media library:
+
+| Service | Role |
+|---|---|
+| **TV Manager** | Monitors and organizes TV show libraries |
+| **Movie Manager** / **4K** | Monitors and organizes movie libraries |
+| **Music Manager** | Monitors and organizes music libraries |
+| **Book / Audiobook Manager** | Monitors and organizes book and audiobook libraries |
+| **Subtitle Manager** / **4K** | Automated subtitle fetching and syncing |
+| **Indexer Aggregator** | Unified indexer management across all content managers |
+| **Transcoding Service** | Automated media transcoding and format optimization |
+
+### Infrastructure & Auth
+
+| Service | Role |
+|---|---|
+| **Authentik** | Self-hosted SSO and identity provider |
+| **Authentik LDAP Outpost** | LDAP integration for Authentik |
+| **PostgreSQL** | Database backend for Authentik |
+| **Redis** | Cache layer for Authentik |
+| **SWAG** | Reverse proxy and SSL certificate management |
+| **Wireguard** | VPN for secure remote access |
+| **Portainer** | Docker container management UI |
+| **Watchtower** | Automated container image updates |
+| **Autoheal** | Automatic restart of unhealthy containers |
+| **Docker Registry** | Private self-hosted container registry |
+
+### Utilities
+
+| Service | Role |
+|---|---|
+| **Nextcloud** | Self-hosted personal cloud storage |
+| **MariaDB** | Database backend for Nextcloud |
+| **Calibre** / **Calibre-Web** | Ebook library management |
+| **VS Code Server** | Browser-based code and text editor |
+| **FileBrowser** | Web-based file manager (also has an api for downloading) |
+| **Smokeping** | Network latency monitoring |
+| **Organizr** | Unified dashboard for all services through the sso |
+| **Static File Server** | Simple file hosting |
+
+### Game Servers
+
+A Minecraft SMP server for my younger brother has been running for years and is one of the longest running services the server!
+I have also hosted rust, cs, racing, and my friends self developed game's servers!
+
+---
 
 ## Home Management Server
 
-## Application Server
+Runs on a separate VLAN - isolated from the media server and not publicly accessible.
+
+| Service | Role |
+|---|---|
+| **Home Assistant** | Central home automation hub |
+| **Frigate** | AI-based NVR for security cameras |
+
+Frigate runs a local AI model on camera feeds for object detection it also has included a bird detection pipeline!
+
+---
 
 ## Storage
+
+| Device | Role |
+|---|---|
+| **TrueNAS Scale** | Primary NAS on the media network, ZFS for redundancy and data integrity |
+| **Synology NAS** | Secondary NAS at my grandparents' and my parents house, connected via site-to-site VPN for off-site backups |

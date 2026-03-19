@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
+import remarkGfm from 'remark-gfm'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -97,12 +98,28 @@ let components = {
   a: CustomLink,
   code: Code,
   Table,
+  table: ({ children }) => (
+    <div className="overflow-x-auto my-4">
+      <table className="w-full text-sm border-collapse">{children}</table>
+    </div>
+  ),
+  th: ({ children }) => (
+    <th className="text-left px-3 py-2 border-b border-neutral-300 dark:border-neutral-700 font-semibold text-neutral-900 dark:text-neutral-100">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="px-3 py-2 border-b border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200">
+      {children}
+    </td>
+  ),
 }
 
 export function CustomMDX(props) {
   return (
     <MDXRemote
       {...props}
+      options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
       components={{ ...components, ...(props.components || {}) }}
     />
   )
