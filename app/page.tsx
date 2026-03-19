@@ -114,6 +114,7 @@ export default function Page() {
           <li>{`Python tooling - test automation frameworks, data analysis for hardware validation, and custom instrument packages including an oscilloscope library for long-run automated measurements`}</li>
           <li>{`PIC32 firmware - developing and maintaining firmware for the microcontrollers that power peripheral hardware inside the simulators`}</li>
           <li>{`Backend integration - interfacing with the simulation databases and Azure file systems for data storage, retrieval, and access`}</li>
+          <li>{`Custom Requests - designing and implementing one off software and firmware solutions for unique customer requests and unique requirements`}</li>
         </ul>
       </div>
     </section>
