@@ -31,8 +31,9 @@ export default function Page() {
 
       <div className="mb-8 space-y-3">
         {[
-          { slug: 'community-server', title: 'Community MC Server', summary: 'Leading a team to make a server!' },
           { slug: 'craig', title: 'Craig: Chess Engine', summary: 'A chess engine in C' },
+          { slug: 'community-server', title: 'Community MC Server', summary: 'Leading a team to make a server!' },
+          { slug: 'home-server', title: 'Home Server(s) Stack', summary: 'All the stuff I have running' },
         ].map((project) => (
           <Link
             key={project.slug}
