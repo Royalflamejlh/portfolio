@@ -10,9 +10,9 @@ export default function Page() {
             About Me
           </h1>
           <p>
-            {`Hello! I'm John, a recent computer engineering graduate from 
-            the University of Illinois and this is my little website documenting
-            and showcasing my projects.`}
+            {`Hello! I'm John, a computer engineering graduate from 
+            the University of Illinois and embedded engineer who enjoys working on a wide variety of projects. 
+            I have experience in embedded systems, software development, and dev ops, hardware design, and more.`}
           </p>
         </div>
         

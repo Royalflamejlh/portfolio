@@ -32,19 +32,19 @@ S, J. H. [illustrator]; Barnicott & Pearce [printer]; S, J. H. [author], Public 
 
 
 The first thing I had to do when writing the engine was pick a representation, 
-while the first thing you may thing of is a char-array of length 64 for each piece and square
+while the first thing you may think of is a char-array of length 64 for each piece and square
 this has generally fallen out of popularity, especially with the move to 64-bit processors
 which allow us to represent pieces on the board as a 64 bit integer called
 bitboard representation. For this to work though you have to manage multiple boards and make 
 sure you keep them in sync. As you have a bitboard for each type of piece and color, along with
 additional bitboards that hold information like which squares are under attack.
-This allows us to greatly reduces the number of cycles needed for move generation and analysis
+This allows us to greatly reduce the number of cycles needed for move generation and analysis
 while introducing a bit of complexity.
 
 ### Move Generation
 
 Once I had my board representation next I had  to generate all the legal moves in a position,
-this is done for the King, Pawn, and Knight by of mapping each square to legal moves from that square and
+this is done for the King, Pawn, and Knight by mapping each square to legal moves from that square and
 then when using it comparing it with open and unattacked squares. The sliding pieces, such as the Queen, Bishop and Rook
 provide their own challenge which I solved by using a hashing technique known as 
 [magic bitboards](https://www.chessprogramming.org/Magic_Bitboards). Once I had move generation I spent a lot 
@@ -100,7 +100,7 @@ can feed in the bitboards to get some sort of evaluation from. I have not looked
 as it adds a huge layer of complexity and would be a whole separate project, but eventually I would
 like to write a NNUE for the engine.
 
-- **Opening and Endgame book support** This would a relatively simple thing to add. It would allow
+- **Opening and Endgame book support** This would be a relatively simple thing to add. It would allow
 for the engine to avoid drawing and losing hard technical endgames, and allow it to compete in tournaments
 against other engines which use opening books at the start of games to ensure a unique match.
 
